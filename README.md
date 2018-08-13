@@ -1,1 +1,1 @@
-React Natie project with Redux
+React Native project with Redux
