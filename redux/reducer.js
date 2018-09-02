@@ -1,6 +1,6 @@
-import {combineReducers, applyMiddleware} from 'redux'
-import apod from './apod'
+import { combineReducers, applyMiddleware } from 'redux'
+import { fetchImageOfTheDay } from './apod'
 
 export default rootReducer = combineReducers({
-    apod
+    apod: fetchImageOfTheDay,
 })

@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
 import DetailScreenComponent from './DetailScreen'
 import HomeScreenComponent from './HomeScreen'
+import DailyScreenComponent from './DailyScreen'
 
 const Main = createStackNavigator({
   HomeScreen: HomeScreenComponent,
@@ -9,10 +10,16 @@ const Main = createStackNavigator({
   initialRouteName: 'HomeScreen',
 });
 
-const TabBar = createBottomTabNavigator ({
+const DailyScreen = createStackNavigator({
+  Daily: DailyScreenComponent,
+})
+
+const TabBar = createBottomTabNavigator({
+  Daily: DailyScreen,
   Monthly: Main,
 })
-const AppNavigator = createSwitchNavigator ({
+
+const AppNavigator = createSwitchNavigator({
   TabBar,
 
 })
