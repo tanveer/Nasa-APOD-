@@ -1,8 +1,10 @@
 import React from 'react';
-import { Text, View, FlatList, Button, } from 'react-native';
+import { Dimensions, Image, View, Text, } from 'react-native';
 import { List, Card } from 'react-native-elements';
 import { fetchImageOfTheDay } from '../redux/actions'
 import { connect } from 'react-redux'
+const WIDTH = Dimensions.get('window').width
+const HEIGHT = Dimensions.get('window').height
 
 class DailyScreenComponent extends React.Component {
     componentDidMount() {
@@ -30,12 +32,11 @@ class DailyScreenComponent extends React.Component {
         }
 
         return (
-            <View>
-                <Card
-                    image={{ uri: image.url }} resizeMode='cover' >
-                    <Text>{image.title}</Text>
-                    <Text style={{ paddingBottom: 10, }}>{image.date}</Text>
-                </Card>
+            <View sryle={{felx: 1}}>
+                <Image source={{ uri: image.url }}
+                    resizeMode='contain'
+                    style={{ height: WIDTH, width: WIDTH}}
+                />
             </View>
         )
     }

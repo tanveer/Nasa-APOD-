@@ -1,10 +1,23 @@
 import React from 'react';
-import { Text, View, FlatList, Button, } from 'react-native';
-import { List, Card } from 'react-native-elements';
+import { Dimensions, Text, View } from 'react-native';
 import { ferchApodFromAPI } from '../redux/actions'
 import { connect } from 'react-redux'
+import Carousel from 'react-native-snap-carousel'
+import Card from './Card'
+import _ from 'lodash'
 
 class HomeScreenComponent extends React.Component {
+
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Image of the day',
+    headerTintColor: 'white',
+    headerBackTitle: null,
+    headerStyle: {
+      backgroundColor: 'red',
+    },
+  })
+
+
   componentDidMount() {
     this.props.fetchApodFromAPI()
   }
@@ -18,22 +31,23 @@ class HomeScreenComponent extends React.Component {
     })
   )
 
-  handleItemRender = ({ item }) => (
-    <Card
-      image={{ uri: item.url }} resizeMode='cover' >
-      <Text>{item.title}</Text>
-      <Text style={{ paddingBottom: 10, }}>{item.date}</Text>
-      <Button title='More...' onPress={() => this.props.navigation.navigate('DetailScreen', {
-        title: item.title,
-        explanation: item.explanation,
-        url: item.url,
-        date: item.date,
-      })} />
-    </Card>
+  renderCard = (item) => {
+    return (
+      <Card {...item} navigation={this.props.navigation} />
+    )
+  }
+
+  setTitle = (title) => (
+    this.props.navigation.setParams({title: title})
   )
 
   render() {
     const { apod, isFetching } = this.props.apod
+    const apod_sorted = _.filter(apod, (obj) => {
+      return obj.media_type === 'image' // show only images
+    }).sort((obj1, obj2) => obj1.date < obj2.date) // sort by date 
+
+
     if (isFetching) {
       return (
         <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
@@ -41,14 +55,15 @@ class HomeScreenComponent extends React.Component {
         </View>
       )
     }
+
     return (
-      <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0, }}>
-        <FlatList
-          data={apod}
-          renderItem={this.handleItemRender}
-          keyExtractor={item => item.date}
-        />
-      </List>
+      <Carousel
+        data={apod_sorted}
+        renderItem={this.renderCard}
+        sliderWidth={Dimensions.get('window').width}
+        itemWidth={Dimensions.get('window').width}
+        containerStyle={{ borderRadius: 10 }}
+      />
     )
   }
 }
